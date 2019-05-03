@@ -1,13 +1,23 @@
 class DockingStation
-  attr_reader :bikes
 
-  def initialize
+  attr_reader :bikes
+  attr_reader :capacity
+
+  DEFAULT_CAPACITY = 20
+
+  def initialize(capacity = 20)
+    @capacity = capacity
     @bikes = []
   end
 
   def release_bike
     raise 'no bikes' if empty?
-    Bike.new
+    if bikes[0].condition == "working"
+      bikes.shift
+    else
+      "no it's broken!"
+    end
+
 
     # replaced with the above guard clause ^
     # if bikes.empty?
@@ -18,18 +28,25 @@ class DockingStation
   end
 
 
-  def dock(bike)
-    puts bikes.length
+  def dock(bike, message = 'working')
     #raise 'docking station full' if bikes.length == 20
     raise 'docking station full' if full?
+    bike.condition = message
     bikes << bike
-    "Bike docked"
+    if message == 'broken'
+      "docked a broken bike"
+    elsif message == 'working'
+      "Bike docked"
+    end
+    # 'Toudou' = 'woof'
   end
+
+
 
 private
 
   def full?
-    bikes.length == 20
+    bikes.length == DEFAULT_CAPACITY
   end
 
   def empty?
@@ -44,7 +61,15 @@ public
 end
 
 class Bike
+  attr_accessor :condition
+
+  def initialize
+    @condition = 'working'
+  end
+
+
+
   def working?
-    true
+    condition
   end
 end
