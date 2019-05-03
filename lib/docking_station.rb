@@ -6,7 +6,7 @@ class DockingStation
   end
 
   def release_bike
-    raise 'no bikes' unless bikes.length > 0
+    raise 'no bikes' if empty?
     Bike.new
 
     # replaced with the above guard clause ^
@@ -17,18 +17,25 @@ class DockingStation
     # end
   end
 
+
   def dock(bike)
     puts bikes.length
     #raise 'docking station full' if bikes.length == 20
-    raise 'docking station full' unless full?
+    raise 'docking station full' if full?
     bikes << bike
     "Bike docked"
   end
 
 private
+
   def full?
-    bikes.length < 20
+    bikes.length == 20
   end
+
+  def empty?
+    bikes.length == 0
+  end
+
 public
 
   def list_bikes
